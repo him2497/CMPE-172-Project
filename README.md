@@ -9,7 +9,7 @@ git clone https://github.com/him2497/ReactBoilerPlate.git
 2. Get rid of git configurations
 
 ```
-rm -rf .git && git init
+rm -rf .git && git init 
 ```
 
 3. Install the dependencies:

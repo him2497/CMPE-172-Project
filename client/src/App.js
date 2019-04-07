@@ -4,7 +4,7 @@ import Dashboard from './component/dashboard/dashboard'
 import PayrollAdmin from './component/payroll/payrollAdmin'
 import './App.css'
 import { BrowserRouter as Router, Route } from "react-router-dom";
-
+import Profile from './component/profile/profile'
 
 class App extends Component {
   render() {
@@ -13,8 +13,7 @@ class App extends Component {
         <div>  
           <Route exact path="/" component={Landing} />
           <Route path="/dashboard" component={Dashboard} />
-          <Route path="/profile" component={Dashboard} />
-          <Route path="/settings" component={Dashboard} />
+          <Route path="/profile" component={Profile} />
           <Route path="/payroll-admin" component={PayrollAdmin} />
         </div>
     </Router>

@@ -19,7 +19,7 @@ class Dashboard extends React.Component {
                 <Card.Body>
                   <Card.Subtitle className="mb-2 text-muted">01/21/2019</Card.Subtitle>
                   <Card.Text>
-                    Leave Request Update
+                    Leave Request Update https://www.youtube.com/watch?v=_AQbWpgOxKg
                   </Card.Text>
                   <Card.Subtitle className="mb-2 text-muted">03/28/2019</Card.Subtitle>
                   <Card.Text>

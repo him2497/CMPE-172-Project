@@ -38,7 +38,7 @@ export default class Landing extends Component {
       <Image src={Land} fluid />
       <Container fluid style={styles.textContainer}>
           <img src={Logo} alt="logo" style={{ width: 100, height: 100}} /> 
-          <h1 style={{fontSize: 50, color: "white"}}>  
+          <h1 style={{fontSize: 50, fontFamily: 'Germania One', color: "white"}}>  
               Alternative Dojo 2.0
           </h1>
           <br/>

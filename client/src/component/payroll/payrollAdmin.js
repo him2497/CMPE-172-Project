@@ -2,11 +2,28 @@ import React from 'react';
 import NavigationBar from '../utils/navigationBar'
 import Container from 'react-bootstrap/Container'
 import Table from 'react-bootstrap/Table'
+import ReactPaginate from 'react-paginate';
 import Pagination from 'react-bootstrap/Pagination'
-
-
+import '../../styles/style.css'
 class PayrollAdmin extends React.Component {
+  constructor(){
+    super()
+    this.state = {
+      pageNum : 1,
+      finalNum : null,
+      currPage : 1
+    }
+  }
 
+
+  componentDidMount(){
+    this.setState({finalNum: 1000})
+  }
+
+  handlePageClick = data => {
+    console.log(data.selected)
+  }
+ 
   render() {
     return (
       <>
@@ -38,29 +55,28 @@ class PayrollAdmin extends React.Component {
               </tr>
               <tr>
                 <td>3</td>
-                <td colSpan="2">Larry the Bird</td>
+                <td>Jacob</td>
+                <td>Thornton</td>
                 <td>@twitter</td>
               </tr>
             </tbody>
           </Table>
-
-          <Pagination style={{justifyContent: 'center'}}>
-            <Pagination.First />
-            <Pagination.Prev />
-            <Pagination.Item>{1}</Pagination.Item>
-            <Pagination.Ellipsis />
-
-            <Pagination.Item>{10}</Pagination.Item>
-            <Pagination.Item>{11}</Pagination.Item>
-            <Pagination.Item active>{12}</Pagination.Item>
-            <Pagination.Item>{13}</Pagination.Item>
-            <Pagination.Item disabled>{14}</Pagination.Item>
-
-            <Pagination.Ellipsis />
-            <Pagination.Item>{20}</Pagination.Item>
-            <Pagination.Next />
-            <Pagination.Last />
-          </Pagination>
+          
+          <div style={{textAlign: 'center'}}>
+            <ReactPaginate
+              previousLabel={'previous'}
+              nextLabel={'next'}
+              breakLabel={'...'}
+              breakClassName={'break-me'}
+              pageCount={this.state.finalNum}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={5}
+              onPageChange={this.handlePageClick}
+              containerClassName={'pagination'}
+              subContainerClassName={'pages pagination'}
+              activeClassName={'active'}
+            />
+          </div>
         </Container>
       </>
     );

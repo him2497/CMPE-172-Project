@@ -14,7 +14,7 @@ class NavigationBar extends React.Component {
     return (
       <>
       <Navbar bg="dark" variant="dark">
-        <Navbar.Brand href="/dashboard">
+        <Navbar.Brand href="/dashboard" style={{fontFamily: 'Germania One'}}>
           <img alt="logo" style={{height:'25px', verticalAlign:'sub', paddingRight: '5px'}} src={Logo}/>
           Alternative Dojo 2.0
         </Navbar.Brand>

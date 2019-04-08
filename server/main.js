@@ -9,11 +9,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 var connection = mysql.createConnection({
-    host     : 'localhost',
+    host     : 'employee.ciz5qgzmyec8.us-west-1.rds.amazonaws.com',
     user     : 'root',
     port     :  3306,
     password : 'password',
-    database : 'employees'
+    database : 'employee'
 });
   
 connection.connect(function(err) {
@@ -27,25 +27,11 @@ connection.connect(function(err) {
 
 
 
-app.get('/:pageNo', (req, res) => {
-    console.log(req.params.pageNo)
-    let pageNo = req.params.pageNo-1
-    connection.query(`SELECT * FROM employees order by emp_no LIMIT ${pageNo*25},25`, function (error, results, fields) {
-        if (error) throw error;
-        console.log('The solution is: ', results);
-      });
-      res.send('Hello World!')
-})
+const routes = require('./routes/index')
+routes(app, connection)
 
-app.post('/getRole', async (req, res) => {
-    let email = await req.body.email
-    await connection.query(`SELECT * from employees where email = ? AND (select emp_no from dept_manager where employees.emp_no = dept_manager.emp_no)`, 
-    [email], function (error, results, fields) {
-        if (error) throw error;
-        console.log('The solution is: ', results);
-        res.send({results})
-      });
-})
+
+
 
 app.listen(port, () => {
     console.log(port)

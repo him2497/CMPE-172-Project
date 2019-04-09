@@ -2,17 +2,24 @@ const express = require('express')
 const mysql = require('mysql')
 const port = 8080
 const bodyParser = require('body-parser')
+const passport = require('passport');
+
 
 let app = express()
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
+
+
 
 var connection = mysql.createConnection({
     host     : 'employee.ciz5qgzmyec8.us-west-1.rds.amazonaws.com',
     user     : 'root',
     port     :  3306,
-    password : 'password',
+    password : 'password', //TODO
     database : 'employee'
 });
   
@@ -25,11 +32,13 @@ connection.connect(function(err) {
     console.log('connected as id ' + connection.threadId);
   });
 
-
+app.use(passport.initialize());
+app.use(passport.session());
+require('./passport/passport').init(app)
+  
 
 const routes = require('./routes/index')
 routes(app, connection)
-
 
 
 

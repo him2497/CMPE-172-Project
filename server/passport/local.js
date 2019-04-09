@@ -10,28 +10,44 @@ module.exports = (connection) => {
         passwordField : 'password',
         passReqToCallback : true // allows us to pass back the entire request to the callback
     },
-    function(req, email, password, done) {
-    
+    function(req, email, password,  done) {
         connection.query("select * from employees where email = '"+email+"'",function(err,rows){
-            console.log(rows);
-            console.log("above row object");
             if (err)
                 return done(err);
              if (rows.length) {
-                return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+                return done(null, false, {'signupMessage': 'That email is already taken.'});
             } else {
     
                 let newUserMysql = new Object();
-                
+                let {birth_date, first_name, last_name, gender} = req.body
                 newUserMysql.email    = email
-                newUserMysql.password = password 
-            
-                var insertQuery = "INSERT INTO users ( email, password ) values ('" + email +"','"+ password +"')";
+                newUserMysql.password = password
+                newUserMysql.birth_date = birth_date
+                newUserMysql.first_name = first_name
+                newUserMysql.last_name = last_name
+                newUserMysql.gender = gender
+
+                let today = new Date();
+                let dd = today.getDate();
+                let mm = today.getMonth() + 1; 
+                let yyyy = today.getFullYear();
+                if (dd < 10) {
+                dd = '0' + dd;
+                } 
+                if (mm < 10) {
+                mm = '0' + mm;
+                } 
+                let hire_date = yyyy + '-' + mm + '-' + dd;
+
+                newUserMysql.hire_date = hire_date
+                let salt = bcrypt.genSaltSync(10);
+                let hash = bcrypt.hashSync(password, salt);
+                var insertQuery = 
+                "INSERT INTO employees (birth_date, first_name, last_name, gender, email, password, hire_date) values ('" + birth_date +"','"+ first_name +"','"+ last_name +"','"+ gender +"','"+ email +"','"+ hash +"','"+ hire_date +"')";
                     console.log(insertQuery);
                 connection.query(insertQuery,function(err,rows){
-                newUserMysql.id = rows.insertId;
-                
-                return done(null, newUserMysql);
+                    console.log(err)
+                    return done(null, rows);
                 });	
             }	
         });

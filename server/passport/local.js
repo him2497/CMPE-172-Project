@@ -15,7 +15,7 @@ module.exports = (connection) => {
             if (err)
                 return done(err);
              if (rows.length) {
-                return done(null, false, {'signupMessage': 'That email is already taken.'});
+                return done(null, false, 'That email is already taken.');
             } else {
     
                 let newUserMysql = new Object();
@@ -49,7 +49,7 @@ module.exports = (connection) => {
                         return done(err);
                         connection.query("SELECT email, emp_no FROM employees where employees.emp_no =" + rows.insertId, (err, result) => {
                             if(err) throw err
-                            return done(null, result[0]);
+                            return done(null, result[0], "Success");
                         })
                 });	
             }	
@@ -64,21 +64,22 @@ module.exports = (connection) => {
         passReqToCallback : true // allows us to pass back the entire request to the callback
     },
     function(req, email, password, done) { // callback with email and password from our form
-         connection.query("SELECT email, emp_no FROM `employees` WHERE `email` = '" + email + "'",function(err,rows){
+         connection.query("SELECT email, emp_no, password FROM `employees` WHERE `email` = '" + email + "'",function(err,rows){
 			if (err)
-                return done(err);
+                done(err);
 			 if (!rows.length) {
-                return done(null, false, 'No user found.'); // req.flash is the way to set flashdata using connect-flash
+                done(null, false, 'No user found.'); // req.flash is the way to set flashdata using connect-flash
             } 
 
             bcrypt.compare(password, rows[0].password, function(err, res) {
-                if (res === false)
-                    return done(null, false, 'Oops! Wrong password.'); // create the loginMessage and save it to session as flashdata
-                });
-			// if the user is found but the password is wrong
-            // all is well, return successful user
-            return done(null, rows[0]);			
-		
+                if (err)
+                    done(err);
+                if (res === false){
+                    done(null, false, 'Oops! Wrong password.'); 
+                }else if(res === true){
+                    done(null, {"email" : rows[0].email, "emp_no" : rows[0].emp_no}, "Success");			
+                }
+            });
 		});
     }))
 }

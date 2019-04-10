@@ -3,6 +3,7 @@ import { Formik } from 'formik';
 import * as yup from 'yup'
 import {Col, Form, Button} from 'react-bootstrap'
 import axios from 'axios'
+import { withRouter } from 'react-router-dom'
 
 
 const schema = yup.object({
@@ -11,7 +12,14 @@ const schema = yup.object({
 });
 
 
-export default class LoginForm extends Component {
+class LoginForm extends Component {
+    constructor(){
+      super()
+      this.state = {
+        noUser: false,
+        wrongPassword: false
+      }
+    }
 
     FormExample = () => {
       return (
@@ -29,8 +37,9 @@ export default class LoginForm extends Component {
             errors,
           }) => (
             <Form noValidate onSubmit={handleSubmit}>
+              <Form.Label style={{color: 'red'}}>{this.state.noUser ? "No user with the email found" : ""}</Form.Label>
+              <Form.Label style={{color: 'red'}}>{this.state.wrongPassword ? "Incorrect password" : ""}</Form.Label>
               <Form.Row>
-  
                 <Form.Group as={Col} controlId="validationFormikUsername">
                   <Form.Label>Email</Form.Label>
                     <Form.Control
@@ -68,12 +77,21 @@ export default class LoginForm extends Component {
     }
 
     handleLogin = (e) => {
-      console.log(e)
       axios.post('/auth/login', {
         "email": e.email, 
         "password": e.password
       }).then((res) => {
-        console.log(res)
+        if(res.data.info === "No user found."){
+          this.setState({
+            noUser: true
+          })
+        }else if(res.data.info === "Oops! Wrong password."){
+          this.setState({
+            wrongPassword: true
+          })
+        }else if(res.data.info === "Success"){
+          this.props.history.push('/dashboard')
+        }
       }).catch(err => {
         console.log(err)
       })
@@ -89,3 +107,6 @@ export default class LoginForm extends Component {
     }
 
 }
+
+
+export default withRouter(LoginForm);

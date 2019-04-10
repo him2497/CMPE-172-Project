@@ -3,6 +3,7 @@ import { Formik } from 'formik';
 import * as yup from 'yup'
 import {Col, Form, Button} from 'react-bootstrap'
 import axios from 'axios'
+import { withRouter } from 'react-router-dom'
 
 
 const schema = yup.object({
@@ -16,7 +17,13 @@ const schema = yup.object({
 });
 
 
-export default class RegisterForm extends Component {
+class RegisterForm extends Component {
+  constructor(){
+    super()
+    this.state = {
+      emailTaken: false,
+    }
+  }
 
     FormExample = () => {
       return (
@@ -34,6 +41,7 @@ export default class RegisterForm extends Component {
             errors,
           }) => (
             <Form noValidate onSubmit={handleSubmit}>
+              <Form.Label style={{color: 'red'}}>{this.state.emailTaken ? "This email has already been taken" : ""}</Form.Label>
               <Form.Row>
                 <Form.Group as={Col} controlId="validationFormikFirstName">
                   <Form.Label>First Name</Form.Label>
@@ -138,7 +146,6 @@ export default class RegisterForm extends Component {
     }
 
     handleRegister = (e) => {
-      console.log(e)
       axios.post('/auth/register', {
         "email": e.email, 
         "password": e.password,
@@ -147,7 +154,14 @@ export default class RegisterForm extends Component {
         "birth_date": e.birth_date,
         "gender": e.gender
       }).then((res) => {
-        console.log(res)
+        if(res.data.info === "That email is already taken."){
+          console.log("object")
+          this.setState({
+            emailTaken: true
+          })
+        }else if(res.data.info === "Success"){
+          this.props.history.push('/dashboard')
+        }
       }).catch(err => {
         console.log(err)
       })
@@ -163,3 +177,6 @@ export default class RegisterForm extends Component {
     }
 
 }
+
+
+export default withRouter(RegisterForm)

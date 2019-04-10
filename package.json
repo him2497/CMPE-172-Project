@@ -1,0 +1,24 @@
+{
+  "name": "cmpe-172-project",
+  "version": "1.0.0",
+  "description": "## Installing 1. Clone the repo ``` git clone https://github.com/him2497/ReactBoilerPlate.git ```",
+  "main": "index.js",
+  "scripts": {
+    "client": "cd client && npm run start",
+    "server": "cd server && nodemon main.js",
+    "start": "concurrently \"npm run client\" && \"npm run server\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/him2497/CMPE-172-Project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/him2497/CMPE-172-Project/issues"
+  },
+  "homepage": "https://github.com/him2497/CMPE-172-Project#readme",
+  "dependencies": {
+    "concurrently": "^4.1.0"
+  }
+}

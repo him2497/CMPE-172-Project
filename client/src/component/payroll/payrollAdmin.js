@@ -3,8 +3,8 @@ import NavigationBar from '../utils/navigationBar'
 import Container from 'react-bootstrap/Container'
 import Table from 'react-bootstrap/Table'
 import ReactPaginate from 'react-paginate';
-import Pagination from 'react-bootstrap/Pagination'
 import '../../styles/style.css'
+
 class PayrollAdmin extends React.Component {
   constructor(){
     super()

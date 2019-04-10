@@ -1,0 +1,165 @@
+import React, { Component } from 'react'
+import { Formik } from 'formik';
+import * as yup from 'yup'
+import {Col, Form, Button} from 'react-bootstrap'
+import axios from 'axios'
+
+
+const schema = yup.object({
+  email: yup.string().required(),
+  password: yup.string().required(),
+  birthdate: yup.date().required(),
+  gender: yup.string().required(),
+  firstName: yup.string().required(),
+  lastName: yup.string().required(),
+
+});
+
+
+export default class RegisterForm extends Component {
+
+    FormExample = () => {
+      return (
+        <Formik
+          validationSchema={schema}
+          onSubmit={this.handleRegister}
+        >
+          {({
+            handleSubmit,
+            handleChange,
+            handleBlur,
+            values,
+            touched,
+            isValid,
+            errors,
+          }) => (
+            <Form noValidate onSubmit={handleSubmit}>
+              <Form.Row>
+                <Form.Group as={Col} controlId="validationFormikFirstName">
+                  <Form.Label>First Name</Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="Enter your first name"
+                      name="firstName"
+                      onChange={handleChange}
+                      isInvalid={!!errors.firstName}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.firstName ? "Please enter your first name" : ""}
+                    </Form.Control.Feedback>
+                </Form.Group>
+              </Form.Row>
+
+              <Form.Row>
+                <Form.Group as={Col} controlId="validationFormikLastName">
+                  <Form.Label>Last Name</Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="Enter your last name"
+                      name="lastName"
+                      onChange={handleChange}
+                      isInvalid={!!errors.lastName}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {"Please enter your last name"}
+                    </Form.Control.Feedback>
+                </Form.Group>
+              </Form.Row>
+
+              <Form.Row>
+                <Form.Group as={Col} controlId="validationFormikEmail">
+                  <Form.Label>Email</Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="Enter your email"
+                      name="email"
+                      onChange={handleChange}
+                      isInvalid={!!errors.email}
+                      autoComplete="username email"
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.email}
+                    </Form.Control.Feedback>
+                </Form.Group>
+              </Form.Row>
+
+              <Form.Row>
+                <Form.Group as={Col} controlId="validationFormikPassword">
+                    <Form.Label>Password</Form.Label>  
+                      <Form.Control
+                        type="password"
+                        placeholder="Password"
+                        name="password"
+                        onChange={handleChange}
+                        isInvalid={!!errors.password}
+                        autoComplete="current-password"
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.password}
+                      </Form.Control.Feedback>
+                  </Form.Group>
+              </Form.Row>
+
+              <Form.Row>
+                <Form.Group as={Col} controlId="formGridState">
+                  <Form.Label>Gender</Form.Label>
+                  <Form.Control as="select" onChange={handleChange} isInvalid={!!errors.gender}
+                    name="gender">
+                    <option>Choose...</option>
+                    <option>M</option>
+                    <option>F</option>
+                  </Form.Control>
+                  <Form.Control.Feedback type="invalid">
+                    {"Please select your gender"}
+                  </Form.Control.Feedback>
+                </Form.Group>
+              </Form.Row>
+
+              <Form.Row>
+                <Form.Group as={Col} controlId="validationFormikBirthdate">
+                    <Form.Label>Birth date</Form.Label>  
+                      <Form.Control
+                        type="date"
+                        name="birthdate"
+                        onChange={handleChange}
+                        isInvalid={!!errors.birthdate}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {"Please enter your Birth Date"}
+                      </Form.Control.Feedback>
+                  </Form.Group>
+              </Form.Row>
+
+              <Button type="submit">Submit</Button>
+            </Form>
+          )}
+        </Formik>
+      );
+    }
+
+    handleRegister = (e) => {
+      console.log(e)
+      axios.post('/auth/register', {
+        "email": e.email, 
+        "password": e.password,
+        "first_name": e.firstName,
+        "last_name": e.lastName,
+        "birth_date": e.birth_date,
+        "gender": e.gender
+      }).then((res) => {
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
+      })
+    }
+
+
+    render(){
+        return(
+            <>
+                {this.FormExample()}
+            </>
+        )
+    }
+
+}

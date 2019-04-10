@@ -44,10 +44,13 @@ module.exports = (connection) => {
                 let hash = bcrypt.hashSync(password, salt);
                 var insertQuery = 
                 "INSERT INTO employees (birth_date, first_name, last_name, gender, email, password, hire_date) values ('" + birth_date +"','"+ first_name +"','"+ last_name +"','"+ gender +"','"+ email +"','"+ hash +"','"+ hire_date +"')";
-                    console.log(insertQuery);
-                connection.query(insertQuery,function(err,rows){
-                    console.log(err)
-                    return done(null, rows);
+                connection.query(insertQuery,function(err, rows){
+                    if (err)
+                        return done(err);
+                        connection.query("SELECT email, emp_no FROM employees where employees.emp_no =" + rows.insertId, (err, result) => {
+                            if(err) throw err
+                            return done(null, result[0]);
+                        })
                 });	
             }	
         });
@@ -56,23 +59,21 @@ module.exports = (connection) => {
     // Login
 
     passport.use('local-login', new LocalStrategy({
-        // by default, local strategy uses username and password, we will override with email
         usernameField : 'email',
         passwordField : 'password',
         passReqToCallback : true // allows us to pass back the entire request to the callback
     },
     function(req, email, password, done) { // callback with email and password from our form
-         connection.query("SELECT * FROM `employees` WHERE `email` = '" + email + "'",function(err,rows){
+         connection.query("SELECT email, emp_no FROM `employees` WHERE `email` = '" + email + "'",function(err,rows){
 			if (err)
                 return done(err);
 			 if (!rows.length) {
-                return done(null, false, {'loginMessage': 'No user found.'}); // req.flash is the way to set flashdata using connect-flash
+                return done(null, false, 'No user found.'); // req.flash is the way to set flashdata using connect-flash
             } 
 
             bcrypt.compare(password, rows[0].password, function(err, res) {
-                // res === true
                 if (res === false)
-                    return done(null, false, {'loginMessage': 'Oops! Wrong password.'}); // create the loginMessage and save it to session as flashdata
+                    return done(null, false, 'Oops! Wrong password.'); // create the loginMessage and save it to session as flashdata
                 });
 			// if the user is found but the password is wrong
             // all is well, return successful user

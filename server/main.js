@@ -8,14 +8,17 @@ const passport = require('passport');
 let app = express()
 
 // parse application/x-www-form-urlencoded
+app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
 // parse application/json
-app.use(bodyParser.json())
 
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Headers', 'Content-type,Authorization');
+  next();
+});
 
-
-var connection = mysql.createConnection({
+let connection = mysql.createConnection({
     host     : 'employee.ciz5qgzmyec8.us-west-1.rds.amazonaws.com',
     user     : 'root',
     port     :  3306,

@@ -6,7 +6,8 @@ import Media from 'react-media';
 export default class simpleCard extends Component {
   render() {
     return (
-      <Media query="(max-width: 720px)" style={{textAlign: "center"}}>
+      <>
+      <Media query="(max-width: 950px)" style={{textAlign: "center"}}>
           {matches =>
             matches ? (
               <Card style={{marginTop: '200px', marginLeft: '20px', marginRight: '20px', paddingBottom: "200px" }}>
@@ -19,6 +20,8 @@ export default class simpleCard extends Component {
             )
           }
         </Media>
+        
+      </>
     )
   }
 }

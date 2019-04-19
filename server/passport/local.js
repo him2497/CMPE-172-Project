@@ -63,23 +63,25 @@ module.exports = (connection) => {
         passwordField : 'password',
         passReqToCallback : true // allows us to pass back the entire request to the callback
     },
-    function(req, email, password, done) { // callback with email and password from our form
-         connection.query("SELECT email, emp_no, password FROM `employees` WHERE `email` = '" + email + "'",function(err,rows){
+    async function(req, email, password, done) { // callback with email and password from our form
+        if(password !== undefined){
+         await connection.query("SELECT email, emp_no, password FROM `employees` WHERE `email` = '" + email + "'", async function(err,rows){
 			if (err)
-                done(err);
+                return done(err);
 			 if (!rows.length) {
-                done(null, false, 'No user found.'); // req.flash is the way to set flashdata using connect-flash
+                return done(null, false, 'No user found.'); // req.flash is the way to set flashdata using connect-flash
             } 
-
-            bcrypt.compare(password, rows[0].password, function(err, res) {
-                if (err)
-                    done(err);
-                if (res === false){
-                    done(null, false, 'Oops! Wrong password.'); 
-                }else if(res === true){
-                    done(null, {"email" : rows[0].email, "emp_no" : rows[0].emp_no}, "Success");			
-                }
+                await bcrypt.compare(password, rows[0].password).then((res) => {
+                    if (res === false){
+                        done(null, false, 'Oops! Wrong password.'); 
+                    }else if(res === true){
+                        done(null, {"email" : rows[0].email, "emp_no" : rows[0].emp_no}, "Success");			
+                    }
+                }).catch(err => {
+                    console.log(err)
+                    done(err)
+                });
             });
-		});
+        }
     }))
 }

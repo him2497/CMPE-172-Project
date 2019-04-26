@@ -23,31 +23,26 @@ const PrivateRoute = ({ component: Component, isAuthenticated,  ...rest}) => (
 )
 class App extends Component {
 
-  constructor(){
-    super()
-    this.state = {
-      authorized: false
-    }
+  logout = () => {
+    this.props.logout(this.props.history)
+    localStorage.removeItem('persist:root')
+    console.log(this.props.auth)
+    return(
+      <Redirect to="/"/>
+    )
   }
-  
-
-
-  async componentDidMount(){
-    console.log(this.props.auth.authorized)
-    console.log(this.props)
-    await this.setState({authorized: this.props.auth.authorized })
-  }
-
 
   render() {
+    let authorized = this.props.auth.authorized
     return (
     <Router>
         <div>  
           <Route exact path="/" component={Landing} />
-          <PrivateRoute path="/dashboard" component={Dashboard} isAuthenticated={this.state.authorized}/>
+          <PrivateRoute path="/dashboard" component={Dashboard} isAuthenticated={authorized}/>
           <Route path="/profile" component={Profile} />
           <Route path="/payroll-admin" component={PayrollAdmin} />
-          {/* <Route path='/logout' render={() => this.props.logout(this.props.history)}/> */}
+          <Route path='/logout'
+          render={() => (this.logout())}/>
         </div>
     </Router>
     );

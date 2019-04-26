@@ -1,10 +1,9 @@
-import {authorizing, createUser, loginUser, 
+import {authorizing, loginUser, 
   isAuthenticated, logout} from '../actions/userAuth'
 import {getUserInfo}  from '../actions/userInfo'
 
 
 export {
-  createUser,
   loginUser,
   isAuthenticated,
   getUserInfo,

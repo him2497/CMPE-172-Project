@@ -2,9 +2,8 @@ import React, { Component } from 'react'
 import { Formik } from 'formik';
 import * as yup from 'yup'
 import {Col, Form, Button} from 'react-bootstrap'
-import axios from 'axios'
 import { withRouter } from 'react-router-dom'
-
+import axios from 'axios'
 
 const schema = yup.object({
   email: yup.string().required(),
@@ -15,7 +14,6 @@ const schema = yup.object({
   lastName: yup.string().required(),
 
 });
-
 
 class RegisterForm extends Component {
   constructor(){
@@ -155,7 +153,6 @@ class RegisterForm extends Component {
         "gender": e.gender
       }).then((res) => {
         if(res.data.info === "That email is already taken."){
-          console.log("object")
           this.setState({
             emailTaken: true
           })

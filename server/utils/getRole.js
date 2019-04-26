@@ -8,9 +8,8 @@ var connection = mysql.createConnection({
   database : 'employee'
 });
 
-exports.getRole = function(callback) {
+exports.getRole = function(email, callback) {
   // console.log(email)
-  let email = 'Vishwani_Minakawa_81@xyz.com'
   let result = null
   connection.query(`SELECT * from employees where email = ? AND (select emp_no from dept_manager where employees.emp_no = dept_manager.emp_no)`, 
     [email], function (error, results) {

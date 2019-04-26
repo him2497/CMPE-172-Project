@@ -1,19 +1,24 @@
 
 module.exports = (app, connection) => {
-    const role = require('./role.js')
-    
+    let jwtToken = require('../utils/jwt')
+    let checkJWT = require('../utils/checkJWT')
+    const role = require('../utils/getRole')
+
     // Get the names of people in payroll
-    app.get('/:pageNo', (req, res) => {
+    app.get('/:pageNo', checkJWT, jwtToken, async (req, res) => {
         const pageNo = req.params.pageNo-1
-        role.getRole(function(error, result) {
+        role.getRole(req.email, function(error, result) {
             if(error) return error;
-            console.log(result)
+            if(result === "Admin"){
+                connection.query(`SELECT * FROM employees order by emp_no LIMIT ${pageNo*25},25`, function (error, results, fields) {
+                    if (error) throw error;
+                    // console.log('The solution is: ', results);
+                    res.send(results)
+                });
+            }else{
+                res.sendStatus(403)
+            }
         })
-        connection.query(`SELECT * FROM employees order by emp_no LIMIT ${pageNo*25},25`, function (error, results, fields) {
-            if (error) throw error;
-            // console.log('The solution is: ', results);
-            res.send(results)
-        });
     })
 
 

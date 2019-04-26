@@ -40,4 +40,18 @@ module.exports = (app, connection) => {
             }
         })(req, res)
     })
+
+
+    app.get('/auth/github',
+        passport.authenticate('github', { scope: [ 'read:user' ] }),
+        function(req, res){
+            // The request will be redirected to GitHub for authentication, so this
+            // function will not be called.
+    });
+
+    app.get('/auth/github/callback', 
+        passport.authenticate('github', { failureRedirect: '/login' }),
+        function(req, res) {
+            res.redirect('/dash');
+    });
 }

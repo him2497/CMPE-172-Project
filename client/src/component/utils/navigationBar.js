@@ -5,7 +5,6 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import { LinkContainer } from "react-router-bootstrap"
 import Logo from '../../images/logo.png'
-import {Link} from 'react-router-dom'
 import NavLink from 'react-bootstrap/NavLink';
 
 class NavigationBar extends React.Component {
@@ -32,9 +31,9 @@ class NavigationBar extends React.Component {
             </LinkContainer>
         </Nav>
         <Form inline>
-          <Link to='/'>
+          <a href='/logout'>
             <Button variant="danger">Logout</Button>
-          </Link>
+          </a>
         </Form>
       </Navbar>
     </>

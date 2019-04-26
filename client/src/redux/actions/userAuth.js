@@ -14,7 +14,6 @@ export function loginUser(email, password, history){
             }else if(res.data.info === "Oops! Wrong password."){
                 dispatch(userNotAuthorized("Oops! Wrong password."))
             }else if(res.data.info === "Success"){
-                console.log(res.data.token , "vjjd")
                 let token = res.data.token
                 dispatch(userAuthorized(true, email, token))
                 history.push('/dashboard')
@@ -32,26 +31,11 @@ export function authorizing(){
     }
 }
 
-export function createUser(email, password, firstName, lastName, gender, history, errorHandler){
-    return async (dispatch) => {
-        email = String(email).toLowerCase();
-        axios.post('/api/auth/register', {
-            email,
-            password,
-            firstName,
-            lastName,
-            gender
-          })
-          .then(function (response) {
-            dispatch(userAuthorized(true));
-            history.push('/verify')
-          })
-          .catch(function (error) {
-            dispatch(userNotAuthorized(error))
-            errorHandler(error.response.data);
-          });
-    }
-}
+// export function authorized(){
+//     return async (dispatch) => {
+//         dispatch(startAuthorizing())
+//     }
+// }
 
 
 export function isAuthenticated(){

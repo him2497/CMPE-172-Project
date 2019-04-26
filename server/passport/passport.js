@@ -12,7 +12,7 @@ module.exports.init = function(app) {
 
     passport.serializeUser(function(user, done) {
         console.log(user)
-        done(null, user.emp_no);
+        done(null, user);
     });
 
     // used to deserialize the user
@@ -25,4 +25,5 @@ module.exports.init = function(app) {
     });
 
     require('./local')(connection)
+    require('./github')(connection)
 }

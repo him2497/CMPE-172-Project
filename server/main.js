@@ -3,6 +3,7 @@ const mysql = require('mysql')
 const port = 8080
 const bodyParser = require('body-parser')
 const passport = require('passport');
+require('dotenv').config()
 
 
 let app = express()
@@ -19,10 +20,10 @@ app.use((req, res, next) => {
 });
 
 let connection = mysql.createConnection({
-    host     : 'employee.ciz5qgzmyec8.us-west-1.rds.amazonaws.com',
-    user     : 'root',
-    port     :  3306,
-    password : 'password', //TODO
+    host     : process.env.DB_HOST,
+    user     : process.env.DB_USER,
+    port     : 3306,
+    password : process.env.DB_PASS, //TODO
     database : 'employee'
 });
   

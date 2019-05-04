@@ -1,5 +1,5 @@
 import {authorizing, loginUser, 
-  isAuthenticated, logout} from '../actions/userAuth'
+  isAuthenticated, authorized, logout} from '../actions/userAuth'
 import {getUserInfo}  from '../actions/userInfo'
 
 
@@ -9,6 +9,7 @@ export {
   getUserInfo,
   logout,
   authorizing,
+  authorized
 }
 
 

@@ -25,6 +25,7 @@ module.exports = (app, connection) => {
     app.post('/auth/register', (req, res) => {
         passport.authenticate('local-signup', async (err, user, info) => {
             if(err) console.log(err)
+            console.log(user, "kkk")
             if(info === "Success"){
                 jwt.sign({user}, 'privatekey', { expiresIn: '1h' },(err, token) => {
                     if(err) { console.log(err) }    
@@ -42,16 +43,27 @@ module.exports = (app, connection) => {
     })
 
 
-    app.get('/auth/github',
-        passport.authenticate('github', { scope: [ 'read:user' ] }),
-        function(req, res){
-            // The request will be redirected to GitHub for authentication, so this
-            // function will not be called.
-    });
+    app.get('/auth/github', passport.authenticate('github', { scope: [ 'read:user' ] }));
 
-    app.get('/auth/github/callback', 
-        passport.authenticate('github', { failureRedirect: '/login' }),
-        function(req, res) {
-            res.redirect('/dash');
-    });
+    app.get('/auth/github/callback', (req, res) => {
+        passport.authenticate('github', async (err, user, info) => {
+            if(err) console.log(err)
+            if(info === "Success"){
+                req.logIn(user, (err) => {
+                    jwt.sign({user}, 'privatekey', { expiresIn: '1h' },(err, token) => {
+                        if(err) { console.log(err) }
+                        res.cookie('jwt', token, {maxAge: 1000 * 60 * 60});
+                        res.header('Authorization', 'Bearer '+ token);
+                        res.redirect("/dashboard")
+                    });
+                })
+            }else {
+                res.redirect(`/github-onboard/${req.email}`);
+            }
+        })(req, res)
+    })
+
+    app.get("/auth/isAuthenticated", (req, res) => {
+        console.log(req.headers.authorization)
+    })
 }

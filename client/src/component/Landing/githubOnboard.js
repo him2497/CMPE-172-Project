@@ -1,52 +1,52 @@
 import React, { Component } from 'react'
+import Container from 'react-bootstrap/Container'
+import {Col, Form, Button} from 'react-bootstrap'
 import { Formik } from 'formik';
 import * as yup from 'yup'
-import {Col, Form, Button} from 'react-bootstrap'
-import { withRouter } from 'react-router-dom'
 import axios from 'axios'
 
+
 const schema = yup.object({
-  email: yup.string().required(),
-  password: yup.string().required(),
-  birthdate: yup.date().required(),
-  gender: yup.string().required(),
-  firstName: yup.string().required(),
-  lastName: yup.string().required(),
+    password: yup.string().required(),
+    birthdate: yup.date().required(),
+    gender: yup.string().required(),
+    firstName: yup.string().required(),
+    lastName: yup.string().required(),
+  });
 
-});
+export default class githubOnboard extends Component {
 
-class RegisterForm extends Component {
-  constructor(){
-    super()
-    this.state = {
-      emailTaken: false,
-    }
-  }
-
+  
     handleRegister = (e) => {
-      axios.post('/auth/register', {
-        "email": e.email, 
-        "password": e.password,
-        "first_name": e.firstName,
-        "last_name": e.lastName,
-        "birth_date": e.birth_date,
-        "gender": e.gender
-      }).then((res) => {
-        if(res.data.info === "That email is already taken."){
-          this.setState({
-            emailTaken: true
+        console.log(this.props.match.params, "ll")
+          axios.post('/auth/register', {
+            "email": this.props.match.params.email, 
+            "password": e.password,
+            "first_name": e.firstName,
+            "last_name": e.lastName,
+            "birth_date": e.birth_date,
+            "gender": e.gender
+          }).then((res) => {
+              console.log(res.data.info)
+            if(res.data.info === "That email is already taken."){
+              this.setState({
+                emailTaken: true
+              })
+            }else if(res.data.info === "Success"){
+              this.props.history.push('/dashboard')
+            }
+          }).catch(err => {
+            console.log(err)
           })
-        }else if(res.data.info === "Success"){
-          this.props.history.push('/dashboard')
-        }
-      }).catch(err => {
-        console.log(err)
-      })
-    }
+      }
+  
 
 
-    render(){
-        return(
+  render() {
+      console.log(this.props.match.params)
+      let email = this.props.match.params.email
+    return (
+      <Container>
             <Formik
               validationSchema={schema}
               onSubmit={this.handleRegister}
@@ -61,7 +61,6 @@ class RegisterForm extends Component {
                 errors,
               }) => (
                 <Form noValidate onSubmit={handleSubmit}>
-                  <Form.Label style={{color: 'red'}}>{this.state.emailTaken ? "This email has already been taken" : ""}</Form.Label>
                   <Form.Row>
                     <Form.Group as={Col} controlId="validationFormikFirstName">
                       <Form.Label>First Name</Form.Label>
@@ -95,28 +94,16 @@ class RegisterForm extends Component {
                   </Form.Row>
 
                   <Form.Row>
-                    <Form.Group as={Col} controlId="validationFormikEmail">
+                    <Form.Group as={Col}>
                       <Form.Label>Email</Form.Label>
-                      {
-                        this.props.method === "Github" ?
                           <Form.Control
                             type="text"
                             disabled
-                            value={this.props.email}
+                            value={email}
                             name="email"
                             onChange={handleChange}
                             autoComplete="username email"
                           />
-                          :
-                          <Form.Control
-                            type="text"
-                            placeholder={"Enter your email"}
-                            name="email"
-                            onChange={handleChange}
-                            isInvalid={!!errors.email}
-                            autoComplete="username email"
-                          />
-                      }
                         <Form.Control.Feedback type="invalid">
                           {errors.email}
                         </Form.Control.Feedback>
@@ -174,10 +161,7 @@ class RegisterForm extends Component {
                 </Form>
               )}
             </Formik>
-          )
-    }
-
+      </Container>
+    )
+  }
 }
-
-
-export default withRouter(RegisterForm)

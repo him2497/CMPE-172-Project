@@ -31,11 +31,11 @@ export function authorizing(){
     }
 }
 
-// export function authorized(){
-//     return async (dispatch) => {
-//         dispatch(startAuthorizing())
-//     }
-// }
+export function authorized(token){
+    return async (dispatch) => {
+        dispatch(userAuthorized(true, 'email', token))
+    }
+}
 
 
 export function isAuthenticated(){

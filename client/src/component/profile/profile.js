@@ -6,9 +6,57 @@ import Image from 'react-bootstrap/Image'
 import Col from 'react-bootstrap/Col'
 import Logo from '../../images/logo.png'
 import Table from 'react-bootstrap/Table'
+import axios from 'axios'
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import * as actions from '../../redux/actions/index';
 
 
-export default class profile extends Component {
+// import Authentication from './component/utils/auth'
+const mapStateToProps = (state) => ({ user: state, auth : state.authReducer })
+const mapDispatchToProps = dispatch => bindActionCreators(actions, dispatch)
+
+
+class profile extends Component {
+    constructor(){
+        super()
+        this.state = {
+            name: null,
+            email: null,
+            emp_id: null,
+            gender: null,
+            birthdate: null,
+            joinDate: null,
+            title: null
+        }
+    }
+
+  componentDidMount(){
+    console.log(this.props.user.authReducer.token)
+    let token = this.props.user.authReducer.token
+    axios.defaults.headers.common['Authorization'] = 
+                                'Bearer ' + token;
+    axios.get('/user/data')
+    .then(res => {
+        let profile = res.data.profile
+        let personalInfo = res.data.personalInfo
+        console.log(res.data)
+        this.setState({
+            name: profile.first_name + " " + profile.last_name,
+            email: profile.email,
+            emp_id: profile.emp_no,
+            gender: profile.gender,
+            birthdate: profile.birth_date,
+            joinDate: profile.hire_date,
+            title: personalInfo.title,
+            salary: personalInfo.salary
+        })
+    })
+    .catch(err => {
+        console.log(err)
+    })
+  }
+
   render() {
     return (
     <>
@@ -28,8 +76,8 @@ export default class profile extends Component {
                     <br/>
                     <br/>
 
-                    <h1>Himanshu</h1>
-                    <h5>Software Engineer</h5>
+                    <h1>{this.state.name}</h1>
+                    <h5>{this.state.title}</h5>
 
                 </Col>
                 <Col></Col>
@@ -46,15 +94,15 @@ export default class profile extends Component {
                             <tbody>
                             <tr>
                                 <td>Full Name</td>
-                                <td>Himanshu Mehta</td>
+                                <td>{this.state.name}</td>
                             </tr>
                             <tr>
                                 <td>Email</td>
-                                <td>himanshuxyz@gmail.com</td>
+                                <td>{this.state.email}</td>
                             </tr>
                             <tr>
                                 <td>Employee ID</td>
-                                <td>EMPID</td>
+                                <td>{this.state.emp_id}</td>
                             </tr>
                             </tbody>
                         </Table>
@@ -80,15 +128,19 @@ export default class profile extends Component {
                             <tbody>
                             <tr>
                                 <td>Gender</td>
-                                <td>Male</td>
+                                <td>{this.state.gender}</td>
                             </tr>
                             <tr>
                                 <td>Birthdate</td>
-                                <td>12/02/1982</td>
+                                <td>{this.state.birthdate}</td>
                             </tr>
                             <tr>
                                 <td>Date Joined</td>
-                                <td>12/05/1999</td>
+                                <td>{this.state.joinDate}</td>
+                            </tr>
+                            <tr>
+                                <td>Salary</td>
+                                <td>$ {this.state.salary}</td>
                             </tr>
                             </tbody>
                         </Table>
@@ -103,6 +155,7 @@ export default class profile extends Component {
   }
 }
 
+export default connect(mapStateToProps, mapDispatchToProps)(profile)
 
 const styles = {
    card: {

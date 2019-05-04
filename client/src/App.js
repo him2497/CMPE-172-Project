@@ -9,6 +9,8 @@ import Profile from './component/profile/profile'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from './redux/actions/index';
+import GithubOnboard from './component/Landing/githubOnboard'
+
 // import Authentication from './component/utils/auth'
 const mapStateToProps = (state) => ({ user: state, auth : state.authReducer })
 const mapDispatchToProps = dispatch => bindActionCreators(actions, dispatch)
@@ -21,6 +23,7 @@ const PrivateRoute = ({ component: Component, isAuthenticated,  ...rest}) => (
       : <Redirect to='/' />
   )} />
 )
+
 class App extends Component {
 
   logout = () => {
@@ -32,15 +35,31 @@ class App extends Component {
     )
   }
 
+  componentDidMount(){
+    if(document.cookie){
+      let token = document.cookie.substring(4,)
+      this.props.authorized(token)
+      
+    }
+  }
+
+
   render() {
+    // console.log(this.props)
+    // if(document.cookie){
+    //   let token = document.cookie.substring(4,)
+    //   this.props.authorized(token)
+    // }
     let authorized = this.props.auth.authorized
     return (
     <Router>
         <div>  
           <Route exact path="/" component={Landing} />
           <PrivateRoute path="/dashboard" component={Dashboard} isAuthenticated={authorized}/>
-          <Route path="/profile" component={Profile} />
+          <PrivateRoute path="/profile" component={Profile} isAuthenticated={authorized}/>
           <Route path="/payroll-admin" component={PayrollAdmin} />
+          <Route path="/github-onboard/:email" component={GithubOnboard} />
+          <Route path="/github-success" component={GithubOnboard} />
           <Route path='/logout'
           render={() => (this.logout())}/>
         </div>
@@ -49,4 +68,4 @@ class App extends Component {
   }
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));;
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));

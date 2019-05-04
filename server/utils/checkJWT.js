@@ -4,7 +4,6 @@ module.exports = (req, res, next) => {
     if(typeof header !== 'undefined') {
         const bearer = header.split(' ');
         const token = bearer[1];
-
         req.token = token;
         next();
     } else {

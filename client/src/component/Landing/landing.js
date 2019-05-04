@@ -63,12 +63,12 @@ export default class Landing extends Component {
                 Login with Google
               </Button>
             </Link>
-            <Link to='/dashboard'>
+            <a href='/auth/github'>
               <Button variant="light" style={styles.button}>
                 <img alt="Github Login" src={GithubLogo} style={styles.logo}/>
                 Login with Github
               </Button>
-            </Link>
+            </a>
 
             <Button variant="light" style={styles.button} onClick={this.handleLoginShow}>
               <img alt="Email Login" src={EmailLogo} style={styles.logo}/>

@@ -11,8 +11,15 @@ module.exports = (app, connection) => {
         })
     })
 
+    app.get("/admin/pageCount", checkJWT, jwtToken, async (req, res) => { 
+        connection.query("SELECT COUNT(*) FROM employees", (err, result) => {
+            if (err) throw err;
+            res.send({data: result[0]['COUNT(*)']})
+        })
+    })
+
     // Get the names of people in payroll
-    app.get('/:pageNo', checkJWT, jwtToken, async (req, res) => {
+    app.get('/admin/:pageNo', checkJWT, jwtToken, async (req, res) => {
         const pageNo = req.params.pageNo-1
         role.getRole(req.email, function(error, result) {
             if(error) return error;

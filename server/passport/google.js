@@ -9,7 +9,6 @@ module.exports = (connection) => {
         passReqToCallback: true
       },
       function(req, accessToken, refreshToken, profile, done) {
-        console.log(profile)
         let email = profile.emails[0].value
         connection.query("SELECT * FROM employees WHERE email='" + email +"'",function(err, rows){
             if (err)

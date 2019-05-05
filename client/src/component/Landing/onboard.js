@@ -18,14 +18,15 @@ export default class githubOnboard extends Component {
 
   
     handleRegister = (e) => {
-        console.log(this.props.match.params, "ll")
-          axios.post('/auth/register', {
+      console.log(this.props.method)
+          axios.post('/auth/register/SSO', {
             "email": this.props.match.params.email, 
             "password": e.password,
             "first_name": e.firstName,
             "last_name": e.lastName,
-            "birth_date": e.birth_date,
-            "gender": e.gender
+            "birth_date": e.birthdate,
+            "gender": e.gender,
+            "SSO": this.props.method
           }).then((res) => {
               console.log(res.data.info)
             if(res.data.info === "That email is already taken."){
@@ -33,7 +34,8 @@ export default class githubOnboard extends Component {
                 emailTaken: true
               })
             }else if(res.data.info === "Success"){
-              this.props.history.push('/dashboard')
+              console.log("object")
+              this.props.history.push('/loading')
             }
           }).catch(err => {
             console.log(err)
@@ -43,7 +45,6 @@ export default class githubOnboard extends Component {
 
 
   render() {
-      console.log(this.props.match.params)
       let email = this.props.match.params.email
     return (
       <Container>

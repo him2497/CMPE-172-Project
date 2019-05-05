@@ -6,7 +6,6 @@ module.exports = (app, connection) => {
     app.post('/auth/login', (req, res) => {
         passport.authenticate('local-login', async (err, user, info) => {
             if(err) console.log(err)
-            console.log(user, info)
             if(info === "Success"){
                 jwt.sign({user}, 'privatekey', { expiresIn: '1h' },(err, token) => {
                     if(err) { console.log(err) }    
@@ -43,12 +42,36 @@ module.exports = (app, connection) => {
     })
 
 
+    app.post('/auth/register/SSO', (req, res) => {
+        passport.authenticate('local-signup', async (err, user, info) => {
+            if(err) console.log(err)
+            if(info === "Success"){
+                    jwt.sign({user}, 'privatekey', { expiresIn: '1h' },(err, token) => {
+                        if(err) { console.log(err) }
+                        res.cookie('jwt', token, {maxAge: 1000 * 60 * 60});
+                        // res.redirect("/auth")
+                        res.send({
+                            info
+                        });
+                    });
+            }else if(info === 'That email is already taken.'){
+                return res.send({
+                    info            
+                })
+            }else {
+                res.redirect('/');
+            }
+        })(req, res)
+    })
+
+
     app.get('/auth/github', passport.authenticate('github', { scope: [ 'read:user' ] }));
 
     app.get('/auth/github/callback', (req, res) => {
         passport.authenticate('github', async (err, user, info) => {
             if(err) console.log(err)
             if(info === "Success"){
+                console.log(user)
                 req.logIn(user, (err) => {
                     jwt.sign({user}, 'privatekey', { expiresIn: '1h' },(err, token) => {
                         if(err) { console.log(err) }
@@ -74,6 +97,7 @@ module.exports = (app, connection) => {
         if(err) console.log(err)
         if(info === "Success"){
             req.logIn(user, (err) => {
+                console.log(user)
                 jwt.sign({user}, 'privatekey', { expiresIn: '1h' },(err, token) => {
                     if(err) { console.log(err) }
                     res.cookie('jwt', token, {maxAge: 1000 * 60 * 60});
@@ -82,7 +106,7 @@ module.exports = (app, connection) => {
                 });
             })
         }else {
-            res.redirect(`/github-onboard/${req.email}`);
+            res.redirect(`/google-onboard/${req.email}`);
         }
     })(req, res)
 })

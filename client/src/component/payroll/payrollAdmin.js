@@ -23,7 +23,9 @@ class PayrollAdmin extends React.Component {
       pageNum : 0,
       finalNum : 0,
       currPage : 0,
-      data: []
+      data: [],
+      title: [],
+      salary: []
     }
   }
 
@@ -36,7 +38,7 @@ class PayrollAdmin extends React.Component {
 
     axios.get('/admin/pageCount')
     .then(res => {
-      this.setState({finalNum: Math.round(res.data.data/25)})
+      this.setState({finalNum: Math.round(res.data.data/25)+1})
     })
     .catch(err => {
       console.log(err)
@@ -44,8 +46,11 @@ class PayrollAdmin extends React.Component {
 
     axios.get(`/admin/${1}`)
     .then((res) => {
+      console.log(res)
       this.setState({
-        data: res.data
+        data: res.data.user,
+        title: res.data.title,
+        salary: res.data.salary
       })
     })
     .catch(err => {
@@ -62,8 +67,11 @@ class PayrollAdmin extends React.Component {
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
     axios.get(`/admin/${data.selected+1}`)
     .then((res) => {
+      console.log(res)
       this.setState({
-        data: res.data
+        data: res.data.user,
+        title: res.data.title,
+        salary: res.data.salary
       })
     })
     .catch(err => {
@@ -82,21 +90,26 @@ class PayrollAdmin extends React.Component {
             <thead>
               <tr>
                 <th>Employee No</th>
-                <th>First Name</th>
-                <th>Last Name</th>
+                <th>Name</th>
                 <th>Email</th>
+                <th>Title</th>
+                <th>Gender</th>
+                <th>Pay</th>
               </tr>
             </thead>
             <tbody>
 
               {
-                this.state.data.map(val => {
+                this.state.data.map((val, idx) => {
                   return(
                     <tr key={val.emp_no}>
                       <td>{val.emp_no}</td>
-                      <td>{val.first_name}</td>
-                      <td>{val.last_name}</td>
+                      <td>{val.first_name + " " + val.last_name}</td>
                       <td>{val.email}</td>
+                      <td>{this.state.title[idx].title}</td>
+                      <td>{val.gender}</td>
+                      <td>{"$ " + this.state.salary[idx].salary}</td>
+
                     </tr>
                   )
                 })

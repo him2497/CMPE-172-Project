@@ -8,7 +8,8 @@ import Profile from './component/profile/profile'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from './redux/actions/index';
-import GithubOnboard from './component/Landing/githubOnboard'
+import GithubOnboard from './component/Landing/onboard'
+import GoogleOnboard from './component/Landing/onboard'
 import Forbidden from './component/error_pages/forbidden';
 import Loading from './component/utils/loading'
 
@@ -21,9 +22,11 @@ const PrivateRoute = ({ component: Component, isAdmin, isAuthenticated,  ...rest
   <Route {...rest} render={(props) => (
     isAuthenticated === true
       ? <Component {...props} />
-      : isAdmin ? <Redirect to='/403' /> : <Redirect to='/' />
+      : <Redirect to='/' />
   )} />
 )
+
+// isAdmin ? <Redirect to='/403' /> : 
 
 class App extends Component {
   constructor(){
@@ -49,8 +52,12 @@ class App extends Component {
           <PrivateRoute path="/dashboard" component={Dashboard} isAuthenticated={authorized}/>
           <PrivateRoute path="/profile" component={Profile} isAuthenticated={authorized}/>
           <PrivateRoute path="/payroll-admin" component={PayrollAdmin} isAdmin={true} isAuthenticated={authorized && admin==="Admin"}/>
-          <Route path="/github-onboard/:email" component={GithubOnboard} />
-          <Route path="/github-success" component={GithubOnboard} />
+          <Route path="/github-onboard/:email" render={(routeProps) => (
+            <GithubOnboard {...routeProps}  method={"Github"} />
+            )} />
+          <Route path="/google-onboard/:email" render={(routeProps) => (
+            <GoogleOnboard {...routeProps}  method={"Google"} />
+            )} />
           <Route path="/403" component={Forbidden} />
           <Route path='/loading' component={Loading}/>
           <Route path='/logout'/>

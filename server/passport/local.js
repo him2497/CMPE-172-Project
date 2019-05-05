@@ -26,6 +26,9 @@ module.exports = (connection) => {
                 newUserMysql.first_name = first_name
                 newUserMysql.last_name = last_name
                 newUserMysql.gender = gender
+                if(req.body.SSO !== undefined){
+                    newUserMysql.SSO = req.body.SSO
+                }
 
                 let today = new Date();
                 let dd = today.getDate();
@@ -42,14 +45,31 @@ module.exports = (connection) => {
                 newUserMysql.hire_date = hire_date
                 let salt = bcrypt.genSaltSync(10);
                 let hash = bcrypt.hashSync(password, salt);
-                var insertQuery = 
-                "INSERT INTO employees (birth_date, first_name, last_name, gender, email, password, hire_date) values ('" + birth_date +"','"+ first_name +"','"+ last_name +"','"+ gender +"','"+ email +"','"+ hash +"','"+ hire_date +"')";
+
+                let insertQuery = ''
+                if(newUserMysql.SSO){
+                    console.log("object")
+                    insertQuery = 
+                    "INSERT INTO employees (birth_date, first_name, last_name, gender, SSO, email, password, hire_date) values ('" + birth_date +"','"+ first_name +"','"+ last_name +"','"+ gender +"','"+ newUserMysql.SSO +"','"+ email +"','"+ hash +"','"    + hire_date +"')";    
+                }else{
+                    insertQuery = 
+                    "INSERT INTO employees (birth_date, first_name, last_name, gender, email, password, hire_date) values ('" + birth_date +"','"+ first_name +"','"+ last_name +"','"+ gender +"','"+ email +"','"+ hash +"','"+ hire_date +"')";                    
+                }
+
                 connection.query(insertQuery,function(err, rows){
                     if (err)
                         return done(err);
-                        connection.query("SELECT email, emp_no FROM employees where employees.emp_no =" + rows.insertId, (err, result) => {
+                        let emp_no
+                        connection.query("SELECT email, emp_no, hire_date FROM employees where employees.emp_no =" + rows.insertId, async (err, results) => {
                             if(err) throw err
-                            return done(null, result[0], "Success");
+                            emp_no = rows.insertId
+                            await connection.query("INSERT INTO titles (emp_no, title, from_date, to_date) values ('" + emp_no +"','"+ " " +"','"+ newUserMysql.hire_date +"','"+ '9999-01-01' +"')", (err, result) => {
+                                if(err) throw err
+                            })
+                            await connection.query("INSERT INTO salaries (emp_no, salary, from_date, to_date) values ('" + emp_no +"','"+ "60000" +"','"+ newUserMysql.hire_date +"','"+ '9999-01-01' +"')", (err, result) => {
+                                if(err) throw err
+                            })
+                            return done(null, results[0], "Success");
                         })
                 });	
             }	

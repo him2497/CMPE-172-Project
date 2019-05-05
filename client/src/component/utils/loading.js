@@ -14,7 +14,7 @@ class loading extends Component {
 
   checkAuth = () => {
     setTimeout(() => {
-      if(document.cookie.includes("jwt")){
+      if(document.cookie.includes("jwt") && document.cookie.substring(4,)!==""){
         let token = document.cookie.substring(4,)
         this.props.authorized(token)
       }

@@ -57,12 +57,11 @@ export default class Landing extends Component {
           <br/>
           <h2 style={{color: 'white'}}>Login using SSO</h2>
           <ButtonToolbar style={{justifyContent: "center"}}>
-            <Link to='/dashboard'>
-              <Button variant="light" style={styles.button}>
+          <a href='/auth/google'>              <Button variant="light" style={styles.button}>
                 <img alt="Google Login" src={GoogleLogo} style={styles.logo}/>
                 Login with Google
               </Button>
-            </Link>
+            </a>
             <a href='/auth/github'>
               <Button variant="light" style={styles.button}>
                 <img alt="Github Login" src={GithubLogo} style={styles.logo}/>

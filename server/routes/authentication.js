@@ -6,6 +6,7 @@ module.exports = (app, connection) => {
     app.post('/auth/login', (req, res) => {
         passport.authenticate('local-login', async (err, user, info) => {
             if(err) console.log(err)
+            console.log(user, info)
             if(info === "Success"){
                 jwt.sign({user}, 'privatekey', { expiresIn: '1h' },(err, token) => {
                     if(err) { console.log(err) }    
@@ -25,7 +26,6 @@ module.exports = (app, connection) => {
     app.post('/auth/register', (req, res) => {
         passport.authenticate('local-signup', async (err, user, info) => {
             if(err) console.log(err)
-            console.log(user, "kkk")
             if(info === "Success"){
                 jwt.sign({user}, 'privatekey', { expiresIn: '1h' },(err, token) => {
                     if(err) { console.log(err) }    
@@ -54,7 +54,7 @@ module.exports = (app, connection) => {
                         if(err) { console.log(err) }
                         res.cookie('jwt', token, {maxAge: 1000 * 60 * 60});
                         res.header('Authorization', 'Bearer '+ token);
-                        res.redirect("/dashboard")
+                        res.redirect("/loading")
                     });
                 })
             }else {
@@ -65,5 +65,10 @@ module.exports = (app, connection) => {
 
     app.get("/auth/isAuthenticated", (req, res) => {
         console.log(req.headers.authorization)
+    })
+
+    app.get('/auth/logout', (req,res) => {
+        res.cookie('jwt', "", {maxAge: Date.now(0)});
+        res.redirect("/")
     })
 }

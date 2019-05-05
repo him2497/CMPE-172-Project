@@ -59,6 +59,7 @@ class LoginForm extends Component {
                       name="email"
                       onChange={handleChange}
                       isInvalid={!!errors.email}
+                      autoComplete="username email"
                     />
                     <Form.Control.Feedback type="invalid">
                       {errors.email}
@@ -74,6 +75,7 @@ class LoginForm extends Component {
                       name="password"
                       onChange={handleChange}
                       isInvalid={!!errors.password}
+                      autoComplete="current-password"
                     />
                     <Form.Control.Feedback type="invalid">
                       {errors.password}

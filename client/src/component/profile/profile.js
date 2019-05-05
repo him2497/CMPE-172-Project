@@ -32,7 +32,6 @@ class profile extends Component {
     }
 
   componentDidMount(){
-    console.log(this.props.user.authReducer.token)
     let token = this.props.user.authReducer.token
     axios.defaults.headers.common['Authorization'] = 
                                 'Bearer ' + token;
@@ -40,7 +39,6 @@ class profile extends Component {
     .then(res => {
         let profile = res.data.profile
         let personalInfo = res.data.personalInfo
-        console.log(res.data)
         this.setState({
             name: profile.first_name + " " + profile.last_name,
             email: profile.email,
@@ -57,7 +55,51 @@ class profile extends Component {
     })
   }
 
+  getMonth(value){
+      switch(value){
+        case 1:
+            return "January"
+        case 2:
+            return "February"
+        case 3:
+            return "March"
+        case 4:
+            return "April"
+        case 5:
+            return "May"
+        case 6:
+            return "June"
+        case 7:
+            return "July"
+        case 8:
+            return "August"
+        case 9:
+            return "September"
+        case 10:
+            return "October"
+        case 11:
+            return "November"
+        case 12:
+            return "December"
+        default:
+            return null
+      }
+  }
+
+
+  nth(d) {
+    if (d > 3 && d < 21) return 'th'; 
+    switch (d % 10) {
+      case 1:  return "st";
+      case 2:  return "nd";
+      case 3:  return "rd";
+      default: return "th";
+    }
+  }
+
   render() {
+    let joinDate = new Date(this.state.joinDate)
+    let birthdate = new Date(this.state.birthdate)  
     return (
     <>
         <NavigationBar/>
@@ -132,11 +174,11 @@ class profile extends Component {
                             </tr>
                             <tr>
                                 <td>Birthdate</td>
-                                <td>{this.state.birthdate}</td>
+                                <td>{this.getMonth(birthdate.getMonth()) + " " + birthdate.getDate() + this.nth(birthdate.getDate()) + " " + birthdate.getFullYear()}</td>
                             </tr>
                             <tr>
                                 <td>Date Joined</td>
-                                <td>{this.state.joinDate}</td>
+                                <td>{this.getMonth(joinDate.getMonth()) + " " + joinDate.getDate() + this.nth(joinDate.getDate()) + " " + joinDate.getFullYear()}</td>
                             </tr>
                             <tr>
                                 <td>Salary</td>
@@ -162,6 +204,7 @@ const styles = {
        backgroundColor: 'white', 
        borderRadius: '3%', 
        padding: 30, 
-       boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)'
+       boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
+       margin: "10px"
     }
 }

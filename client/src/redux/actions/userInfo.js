@@ -3,7 +3,6 @@ import {store} from '../store'
 
 export function getUserInfo() {
     return async (dispatch) => {
-        console.log(store.getState())
         let token = store.getState().authReducer.token
         axios.get('/user/data', {
             'headers': {

@@ -4,6 +4,13 @@ module.exports = (app, connection) => {
     let checkJWT = require('../utils/checkJWT')
     const role = require('../utils/getRole')
 
+    app.get('/check/access_control', checkJWT, jwtToken, async (req, res) => {
+        role.getRole(req.email, function(error, result) {
+            if(error) return error;
+            res.send(result)
+        })
+    })
+
     // Get the names of people in payroll
     app.get('/:pageNo', checkJWT, jwtToken, async (req, res) => {
         const pageNo = req.params.pageNo-1

@@ -17,7 +17,7 @@ module.exports = (connection) => {
                 req.email = email
                 return done(null, "New", "New User")
             }
-            return done(null, rows, "Success")
+            return done(null, rows[0], "Success")
         });	
 
         // let first_name = ''

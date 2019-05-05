@@ -13,7 +13,7 @@ import GithubLogo from '../../images/github-logo.png'
 import EmailLogo from '../../images/email.png'
 import LoginForm from './loginForm'
 import RegisterForm from './registerForm'
-
+import Footer from '../utils/footer'
 export default class Landing extends Component {
   constructor(props, context) {
     super(props, context);
@@ -105,19 +105,6 @@ export default class Landing extends Component {
               </Modal.Header>
               <Modal.Body style={{textAlign: 'center'}}>
                 <RegisterForm/>
-                <br/>
-                <br/>
-
-                <Button variant="outline-info" style={styles.button}>
-                  <img alt="Google Login" src={GoogleLogo} style={styles.logo}/>
-                  Signup with Google
-                </Button>
-                <br/>
-                <Button variant="outline-info" style={styles.button}>
-                  <img alt="Github Login" src={GithubLogo} style={styles.logo}/>
-                  Signup with Github
-                </Button>
-                <br/>
               </Modal.Body>
               <Modal.Footer>
                 <Button variant="secondary" onClick={this.handleClose}>
@@ -128,6 +115,9 @@ export default class Landing extends Component {
           </ButtonToolbar>
       </Container>
       <SimpleCard/>
+      <br/>
+      <br/>
+      <Footer />
     </div>
     )
   }

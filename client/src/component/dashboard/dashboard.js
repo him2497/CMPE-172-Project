@@ -3,9 +3,15 @@ import NavigationBar from '../utils/navigationBar'
 import Card from 'react-bootstrap/Card'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import * as actions from '../../redux/actions/index';
 
+const mapStateToProps = (state) => ({ user: state, auth : state.authReducer })
+const mapDispatchToProps = dispatch => bindActionCreators(actions, dispatch)
 
 class Dashboard extends React.Component {
+
 
   render() {
     return (
@@ -81,4 +87,4 @@ class Dashboard extends React.Component {
 }
 
 
-export default Dashboard;
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

@@ -8,14 +8,13 @@ export function loginUser(email, password, history){
             "email": email, 
             "password": password
           }).then((res) => {
-              console.log(res.data)
             if(res.data.info === "No user found."){
                 dispatch(userNotAuthorized("No user found."))
             }else if(res.data.info === "Oops! Wrong password."){
                 dispatch(userNotAuthorized("Oops! Wrong password."))
             }else if(res.data.info === "Success"){
                 let token = res.data.token
-                dispatch(userAuthorized(true, email, token))
+                dispatch(userAuthorized(true, token))
                 history.push('/dashboard')
             }
           }).catch(function (error) {
@@ -33,16 +32,18 @@ export function authorizing(){
 
 export function authorized(token){
     return async (dispatch) => {
-        dispatch(userAuthorized(true, 'email', token))
+        dispatch(userAuthorized(true, token))
+        dispatch(isAdmin(token))
     }
 }
 
 
-export function isAuthenticated(){
+export function isAdmin(token){
     return async (dispatch) => {
-        await axios.get('/api/auth/isAuthenticated')
-                .then((res) => {
-                dispatch(userAuthorized(res.data))
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+        await axios.get('/check/access_control')
+            .then((res) => {
+                dispatch(userIsAdmin(res.data))
             })
             .catch(err => {
                 console.log(err)
@@ -52,7 +53,7 @@ export function isAuthenticated(){
 
 
 export function logout(history) {
-    return async(dispatch) => {
+    return async (dispatch) => {
         await dispatch(userLogout())
         history.index = 0
         await history.push('/')
@@ -63,10 +64,16 @@ export const startAuthorizing = () => ({
     type: 'USER_START_AUTHORIZING'
   });
 
-export const userAuthorized = (authorized, email, token) => ({
+
+export const userIsAdmin = (acl) => ({
+    type: 'USER_ACCESS_CONTROL',
+    acl
+});
+
+
+export const userAuthorized = (authorized, token) => ({
     type: 'USER_AUTHORIZED',
     authorized,
-    email,
     token
 });
 

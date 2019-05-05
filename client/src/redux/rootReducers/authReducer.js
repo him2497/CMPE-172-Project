@@ -1,10 +1,10 @@
 const initialState = {
-    email: null,
     authorizing: false, 
     authorized: false,
     error: null,
     cancel: false,
-    token: null
+    token: null,
+    acl: null
   }
   
   export default function reducer(state = initialState, action) {
@@ -13,7 +13,9 @@ const initialState = {
       case 'USER_START_AUTHORIZING':
         return { ...state, authorizing: true }
       case 'USER_AUTHORIZED':
-        return { ...state, authorizing: false, email: action.email, token: action.token, authorized: action.authorized}
+        return { ...state, authorizing: false, token: action.token, authorized: action.authorized}
+      case 'USER_ACCESS_CONTROL':
+        return {...state, acl: action.acl}
       case 'LOG_OUT_USER':
         state = initialState
         return state

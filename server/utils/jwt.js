@@ -9,8 +9,8 @@ const jwt = require('jsonwebtoken');
             res.sendStatus(403);
         } else {
             //If token is successfully verified, we can send the autorized data 
-            req.email = authorizedData.user[0].email
-            req.emp_no = authorizedData.user[0].emp_no
+            req.email = authorizedData.user.email
+            req.emp_no = authorizedData.user.emp_no
             next()
             console.log('SUCCESS: Connected to protected route');
         }

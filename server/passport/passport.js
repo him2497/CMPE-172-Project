@@ -26,4 +26,5 @@ module.exports.init = function(app) {
 
     require('./local')(connection)
     require('./github')(connection)
+    require('./google')(connection)
 }

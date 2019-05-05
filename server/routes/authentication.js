@@ -63,6 +63,30 @@ module.exports = (app, connection) => {
         })(req, res)
     })
 
+
+    app.get('/auth/google', passport.authenticate('google', { scope: [
+        'https://www.googleapis.com/auth/userinfo.profile',
+        'https://www.googleapis.com/auth/userinfo.email'
+    ] }));
+
+    app.get('/auth/google/callback', (req, res) => {
+    passport.authenticate('google', async (err, user, info) => {
+        if(err) console.log(err)
+        if(info === "Success"){
+            req.logIn(user, (err) => {
+                jwt.sign({user}, 'privatekey', { expiresIn: '1h' },(err, token) => {
+                    if(err) { console.log(err) }
+                    res.cookie('jwt', token, {maxAge: 1000 * 60 * 60});
+                    res.header('Authorization', 'Bearer '+ token);
+                    res.redirect("/loading")
+                });
+            })
+        }else {
+            res.redirect(`/github-onboard/${req.email}`);
+        }
+    })(req, res)
+})
+
     app.get("/auth/isAuthenticated", (req, res) => {
         console.log(req.headers.authorization)
     })

@@ -19,7 +19,7 @@ export default class githubOnboard extends Component {
   
     handleRegister = (e) => {
       console.log(this.props.method)
-          axios.post('/auth/register/SSO', {
+          axios.post(process.env.REACT_APP_API_URL+'/auth/register/SSO', {
             "email": this.props.match.params.email, 
             "password": e.password,
             "first_name": e.firstName,

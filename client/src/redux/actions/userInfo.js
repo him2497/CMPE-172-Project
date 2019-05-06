@@ -4,7 +4,7 @@ import {store} from '../store'
 export function getUserInfo() {
     return async (dispatch) => {
         let token = store.getState().authReducer.token
-        axios.get('/user/data', {
+        axios.get(process.env.REACT_APP_API_URL+'/user/data', {
             'headers': {
                 'Authorization': 'Bearer ' + token
               }

@@ -4,7 +4,7 @@ export function loginUser(email, password, history){
     email = String(email).toLowerCase();
     return async (dispatch) => {
         dispatch(authorizing())
-        await axios.post('/auth/login', {
+        await axios.post(process.env.REACT_APP_API_URL+'/auth/login', {
             "email": email, 
             "password": password
           }).then((res) => {
@@ -41,7 +41,7 @@ export function authorized(token){
 export function isAdmin(token){
     return async (dispatch) => {
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
-        await axios.get('/check/access_control')
+        await axios.get(process.env.REACT_APP_API_URL+'/check/access_control')
             .then((res) => {
                 dispatch(userIsAdmin(res.data))
             })

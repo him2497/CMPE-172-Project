@@ -30,7 +30,7 @@ class NavigationBar extends React.Component {
     this.props.logout(this.props.history)
     localStorage.removeItem('persist:root')
     if(document.cookie.includes("jwt")){
-      axios.get("/auth/logout")
+      axios.get(process.env.REACT_APP_API_URL+"/auth/logout")
     }
   }
 

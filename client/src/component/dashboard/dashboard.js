@@ -6,6 +6,7 @@ import Row from 'react-bootstrap/Row'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from '../../redux/actions/index';
+import MyTasks from './myTasks'
 
 const mapStateToProps = (state) => ({ user: state, auth : state.authReducer })
 const mapDispatchToProps = dispatch => bindActionCreators(actions, dispatch)
@@ -20,21 +21,14 @@ class Dashboard extends React.Component {
         <Container>
           <br/>
           <Row>
-              <Card style={{width: '18rem', margin: '20px' }}>
-                <Card.Header>Messages</Card.Header>
+              <Card style={{width: '100rem', margin: '20px' }}>
+                <Card.Header>My Tasks</Card.Header>
                 <Card.Body>
-                  <Card.Subtitle className="mb-2 text-muted">01/21/2019</Card.Subtitle>
-                  <Card.Text>
-                    Leave Request Update https://www.youtube.com/watch?v=_AQbWpgOxKg
-                  </Card.Text>
-                  <Card.Subtitle className="mb-2 text-muted">03/28/2019</Card.Subtitle>
-                  <Card.Text>
-                    Leave Request Accepted
-                  </Card.Text>
-                  <Card.Link href="#">>View More</Card.Link>
+                  <MyTasks/>
                 </Card.Body>
               </Card>
-
+            </Row>
+            <Row>
               <Card style={{width: '18rem', margin: '20px'}}>
                 <Card.Header>Events</Card.Header>
                 <Card.Body>

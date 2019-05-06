@@ -24,7 +24,7 @@ class RegisterForm extends Component {
   }
 
     handleRegister = (e) => {
-      axios.post(process.env.REACT_APP_API_URL+'/auth/register', {
+      axios.post('/auth/register', {
         "email": e.email, 
         "password": e.password,
         "first_name": e.firstName,

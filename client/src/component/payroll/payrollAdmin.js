@@ -36,7 +36,7 @@ class PayrollAdmin extends React.Component {
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
     // console.log(this.state.pageNum, this.state.currPage)
 
-    axios.get(process.env.REACT_APP_API_URL+'/admin/pageCount')
+    axios.get('/admin/pageCount')
     .then(res => {
       this.setState({finalNum: Math.round(res.data.data/25)+1})
     })
@@ -44,7 +44,7 @@ class PayrollAdmin extends React.Component {
       console.log(err)
     })
 
-    axios.get(process.env.REACT_APP_API_URL+`/admin/${1}`)
+    axios.get(`/admin/${1}`)
     .then((res) => {
       console.log(res)
       this.setState({
@@ -65,7 +65,7 @@ class PayrollAdmin extends React.Component {
 
     let token = this.props.user.authReducer.token
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
-    axios.get(process.env.REACT_APP_API_URL+`/admin/${data.selected+1}`)
+    axios.get(`/admin/${data.selected+1}`)
     .then((res) => {
       console.log(res)
       this.setState({

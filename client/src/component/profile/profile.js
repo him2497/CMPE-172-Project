@@ -35,7 +35,7 @@ class profile extends Component {
     let token = this.props.user.authReducer.token
     axios.defaults.headers.common['Authorization'] = 
                                 'Bearer ' + token;
-    axios.get(process.env.REACT_APP_API_URL+'/user/data')
+    axios.get('/user/data')
     .then(res => {
         let profile = res.data.profile
         let personalInfo = res.data.personalInfo

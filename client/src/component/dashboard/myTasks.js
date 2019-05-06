@@ -4,7 +4,7 @@ export default class myTasks extends Component {
   render() {
     return (
       <div>
-        he
+        Hello
       </div>
     )
   }

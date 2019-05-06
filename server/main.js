@@ -1,6 +1,6 @@
 const express = require('express')
 const mysql = require('mysql')
-const port = 8080
+const port = 8000
 const bodyParser = require('body-parser')
 const passport = require('passport');
 require('dotenv').config()

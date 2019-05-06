@@ -103,12 +103,12 @@ class profile extends Component {
     return (
     <>
         <NavigationBar/>
-        <Container>
+        <Container className="is-dark-text-light">
             <br/>
             <Row>
                 <Col>
                 </Col>
-                <Col style={{textAlign: 'center'}}>
+                <Col style={{textAlign: 'center', color: 'white'}}>
                     <Image 
                     src={Logo} 
                     style={{ height: 150, 

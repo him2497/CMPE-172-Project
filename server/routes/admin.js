@@ -72,9 +72,96 @@ module.exports = (app, connection) => {
 
 
     // Edit the payroll info for a user
+    app.get('/admin/get/:emp_no', checkJWT, jwtToken, async (req, res) => {
+        console.log(req.params.emp_no)
+        if(req.params.emp_no !== NaN){
+            let personalInfo = {}
+            await connection.query("select title from titles where to_date = '9999-01-01' and emp_no = '"+req.params.emp_no+"'",function(err,rows){
+                if(err){
+                    return err
+                }
+                personalInfo.title = rows[0].title
+            })
+    
+            await connection.query("select salary from salaries where to_date = '9999-01-01' and emp_no = '"+req.params.emp_no+"'",function(err,rows){
+                if(err){
+                    return err
+                }
+                personalInfo.salary = rows[0].salary
+            })
+            
+            await connection.query("select first_name,last_name,email, hire_date from employees where emp_no = '"+req.params.emp_no+"'",function(err,rows){
+                if(err){
+                    return err
+                }
+                res.status(200).send({profile: rows[0], personalInfo})
+            })
+        }
+    })
 
     // Delete a person from payroll
+    app.get('/admin/delete/user/:emp_no', checkJWT, jwtToken, async (req, res) => {
+        if(req.params.emp_no !== NaN){
+            let personalInfo = {}
+            await connection.query("delete from titles where to_date = '9999-01-01' and emp_no = '"+req.params.emp_no+"'",function(err,rows){
+                if(err){
+                    return err
+                }
+            })
+    
+            await connection.query("delete from salaries where to_date = '9999-01-01' and emp_no = '"+req.params.emp_no+"'",function(err,rows){
+                if(err){
+                    return err
+                }
+            })
+            
+            await connection.query("delete from employees where emp_no = '"+req.params.emp_no+"'",function(err,rows){
+                if(err){
+                    return err
+                }
+            })
+            res.status(200).send({info: "Success"})
+        }
+    })
+
 
     // Change personal info for a user
+    app.post('/admin/update/personal/:emp_no', checkJWT, jwtToken, async (req, res) => {
+        console.log(req.body)
+        console.log(req.params.emp_no)
+        if(req.params.emp_no !== NaN){            
+            await connection.query("update employees set first_name='"+req.body.first_name+"' ,last_name='"+req.body.last_name+"',email='"+req.body.email+"' where emp_no = '" + req.params.emp_no+"'",function(err,rows){
+                if(err){
+                    return err
+                }
+                res.status(200).send({info: "Success"})
+            })
+        }
+    })
+
+    app.post('/admin/update/title/:emp_no', checkJWT, jwtToken, async (req, res) => {
+        console.log(req.params.emp_no)
+        if(req.params.emp_no !== NaN){            
+            await connection.query("update titles set title='"+req.body.title+"' where emp_no = '" + req.params.emp_no+"'",function(err,rows){
+                if(err){
+                    return err
+                }
+                res.status(200).send({info: "Success"})
+            })
+        }
+    })
+
+    app.post('/admin/update/salary/:emp_no', checkJWT, jwtToken, async (req, res) => {
+        console.log(req.params.emp_no)
+        console.log(req.body)
+        if(req.params.emp_no !== NaN){            
+            await connection.query("update salaries set salary='"+req.body.salary+"'where emp_no = '" + req.params.emp_no+"'",function(err,rows){
+                if(err){
+                    return err
+                }
+                res.status(200).send({info: "Success"})
+            })
+        }
+    })
 
 }

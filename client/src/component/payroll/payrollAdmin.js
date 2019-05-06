@@ -103,7 +103,7 @@ class PayrollAdmin extends React.Component {
                 this.state.data.map((val, idx) => {
                   return(
                     <tr key={val.emp_no}>
-                      <td>{val.emp_no}</td>
+                      <td><a href={'/edit/'+val.emp_no}>{val.emp_no}</a></td>
                       <td>{val.first_name + " " + val.last_name}</td>
                       <td>{val.email}</td>
                       <td>{this.state.title[idx].title}</td>

@@ -80,7 +80,7 @@ export default class Landing extends Component {
 
             {/* Login Modal */}
             <Modal show={this.state.loginShow} onHide={this.handleLoginClose} size="lg"
-              aria-labelledby="contained-modal-title-vcenter"
+              aria-labelledby="contained-modal-title-vcenter" className="is-dark-text-light"
               centered>
               <Modal.Header closeButton>
                 <Modal.Title>Login</Modal.Title>
@@ -97,7 +97,7 @@ export default class Landing extends Component {
             
 
             <Modal show={this.state.show} onHide={this.handleClose} size="lg"
-              aria-labelledby="contained-modal-title-vcenter">
+              aria-labelledby="contained-modal-title-vcenter" className="is-dark-text-light">
               <Modal.Header closeButton>
                 <Modal.Title>Signup</Modal.Title>
               </Modal.Header>

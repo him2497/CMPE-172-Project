@@ -14,10 +14,16 @@ class loading extends Component {
 
   checkAuth = () => {
     setTimeout(() => {
-      if(document.cookie.includes("jwt") && document.cookie.substring(4,)!==""){
-        let token = document.cookie.substring(4,)
-        this.props.authorized(token)
-      }
+      let cookies = document.cookie.split(" ")
+      cookies.map((i, idx) => {
+        if(i.includes('jwt')){
+          console.log(idx)
+          if(cookies[idx].includes("jwt") && cookies[idx].substring(4,)!==""){
+            let token = cookies[idx].substring(4,)
+            this.props.authorized(token)
+          }
+        }
+      })
 
       if(this.props.auth.authorized){
         this.props.history.push("/dashboard")

@@ -12,6 +12,8 @@ import GithubOnboard from './component/Landing/onboard'
 import GoogleOnboard from './component/Landing/onboard'
 import Forbidden from './component/error_pages/forbidden';
 import Loading from './component/utils/loading'
+import Sales from './component/sales/sales'
+import EditPayroll from './component/payroll/editPayroll'
 
 // import Authentication from './component/utils/auth'
 const mapStateToProps = (state) => ({ user: state, auth : state.authReducer })
@@ -49,9 +51,11 @@ class App extends Component {
     <Router>
         <div>  
           <Route exact path="/" component={Landing} />
+          <PrivateRoute path="/sales" component={Sales} isAuthenticated={authorized}/>
           <PrivateRoute path="/dashboard" component={Dashboard} isAuthenticated={authorized}/>
           <PrivateRoute path="/profile" component={Profile} isAuthenticated={authorized}/>
           <PrivateRoute path="/payroll-admin" component={PayrollAdmin} isAdmin={true} isAuthenticated={authorized && admin==="Admin"}/>
+          <PrivateRoute path="/edit/:emp_id" component={EditPayroll} isAdmin={true} isAuthenticated={authorized && admin==="Admin"}/>
           <Route path="/github-onboard/:email" render={(routeProps) => (
             <GithubOnboard {...routeProps}  method={"Github"} />
             )} />

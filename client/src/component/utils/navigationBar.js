@@ -56,6 +56,10 @@ class NavigationBar extends React.Component {
             <LinkContainer to="/profile">
               <NavLink>Profile</NavLink>
             </LinkContainer>
+
+            <LinkContainer to="/sales">
+              <NavLink>Sales</NavLink>
+            </LinkContainer>
             {
               this.props.auth.acl === "Admin" ? 
               <LinkContainer to="/payroll-admin">

@@ -134,7 +134,7 @@ class App extends Component {
       amRevenue: formatNum(amRevenue),
       ebRevenue: formatNum(ebRevenue),
       etRevenue: formatNum(etRevenue),
-      totalRevenue: formatNum(totalRevenue),
+      totalRevenue: formatNum(totalRevenue*10000),
       productViews: formatNum(productViews),
       purchaseRate: purchaseRate,
       checkoutRate: checkoutRate,

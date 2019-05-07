@@ -11,6 +11,12 @@ export default class myTasks extends Component {
     }
   }
 
+  componentDidMount(){
+    this.setState({
+      tasks: [...this.state.tasks, "Finish CMPE 172 Report", "Look at the sales report"]
+    })
+  }
+
   addTasks = (e) => {
     e.preventDefault()
     this.setState({
